@@ -1,7 +1,7 @@
 var noteData = require("../db/db.json");
 var fs = require("fs");
 var util = require("util");
-var string = require("string")
+var string = require("unique-string");
 
 var writeFileAsync = util.promisify(fs.writeFile);
 
@@ -10,7 +10,7 @@ module.exports = function (app) {
     app.get("/api/notes", function (req, res) {
         res.json(noteData);
     });
-    app.post("/api/notes", function (req, res) {
+    app.post("/api/notes", async function (req, res) {
         req.body.id = string();
         noteData.push(req.body)
 
@@ -24,7 +24,7 @@ module.exports = function (app) {
             return res.json(false);
         }
     });
-    app.delete("/api/notes/:id", function (req, res) {
+    app.delete("/api/notes/:id", async function (req, res) {
         console.log(req.url);
 
         var index = noteData.findIndex(function(note){
